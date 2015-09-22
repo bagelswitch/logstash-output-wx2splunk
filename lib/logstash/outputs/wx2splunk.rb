@@ -205,3 +205,5 @@ class LogStash::Outputs::Wx2splunk < LogStash::Outputs::Base
         @sockets[host][port] = nil
     end
   end
+end
+
