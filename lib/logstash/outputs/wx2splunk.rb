@@ -52,18 +52,6 @@ class LogStash::Outputs::Wx2splunk < LogStash::Outputs::Base
         @sockets[host][port].write(message + "\r\n")
   end
 
-  private
-  def sendToFile(filename, message)
-        begin
-          file = File.open(filename, "a")
-          file.write(message + "\n") 
-        rescue IOError => e
-          @logger.error("Problem writing to file " + filename)
-        ensure
-          file.close unless file == nil
-        end
-  end
-
   public
   def receive(event)
     host = nil
@@ -193,8 +181,6 @@ class LogStash::Outputs::Wx2splunk < LogStash::Outputs::Base
             port = target["port"]
             protocol = target["protocol"]
             send(host, port, protocol, message)
-            filename = "/var/log/logstash/" + event["@environment"] + "-" + fields["sourceTag"] + "-" + appname + ".dump"
-            sendToFile(filename, message)
             @logger.info("Sent Splunk event to "+protocol+":"+host+":"+port+" for "+appname)
           end
         end
